@@ -20,9 +20,9 @@ ReadPort = (_port) => {
         const deviceName = port.pnpId.split(`\\`);
         const filePath = `${logsDir}/${deviceName[2]}.txt`;
         if (!fs.existsSync(filePath)) {
-          fs.writeFileSync(filePath, `${dateNow}  :: Zaczynam zapis\n`);
+          fs.writeFileSync(filePath, `${dateNow}  :: Zaczynam zapis :: ${deviceName[2]}\n`);
         } else {
-          fs.appendFileSync(filePath, `${dateNow} :: Zaczynam zapis\n`);
+          fs.appendFileSync(filePath, `${dateNow} :: Zaczynam zapis :: ${deviceName[2]}\n`);
         }
 
         const readPort = new SerialPort(`${_port}`, { baudRate: 9600 });
