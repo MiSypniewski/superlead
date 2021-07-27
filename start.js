@@ -19,7 +19,6 @@ const rl = readline.createInterface({
 ReadPort = (_port) => {
   // const date = new Date();
   moment.locale("pl");
-  console.log(`szukam portu  ${_port}` );
   const dateNow = moment().format("DD-MM-YYYY HH:mm:SS");
   SerialPort.list().then((ports) => {
     ports.forEach((port) => {
@@ -48,10 +47,12 @@ ReadPort = (_port) => {
 
 Start = async () => {
   let myPorts = [];
+  
   await SerialPort.list().then(
     (ports) => {
+      console.log("\n");
       ports.forEach((port, index) => {
-        console.log(`${index}. ${port.path}\t${port.pnpId || ""}`);
+        console.log(`  ${index}. ${port.path}\t${port.pnpId || ""}`);
         myPorts.push(port.path)
       });
     },
@@ -59,18 +60,25 @@ Start = async () => {
       console.error("Error listing ports", err);
     }
   );
-  rl.question("Jaki port COM otworzyć? ", (userPort) => {
+  rl.question("\nJaki port COM otworzyć? ", (userPort) => {
     const uPort = parseInt(userPort);
-    ReadPort(myPorts[uPort]);
-    // rl.close();
+    
+    
+    if (myPorts.length >= uPort){
+      ReadPort(myPorts[uPort]);
+    } else {
+      console.log(`Wybrałeś zły numer!`);
+      rl.close();
+    }
 });
 };
-
-Start();
-
-
 
 rl.on("close", function() {
     console.log("\nBYE BYE !!!");
     process.exit(0);
 });
+
+Start();
+
+
+
