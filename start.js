@@ -12,14 +12,14 @@ if (!fs.existsSync(logsDir)) {
 
 
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+  input: process.stdin,
+  output: process.stdout
 });
 
 ReadPort = (_port) => {
   // const date = new Date();
   moment.locale("pl");
-  const dateNow = moment().format("DD-MM-YYYY HH:mm:SS");
+  const dateNow = moment().format("DD-MM-YYYY HH:mm:ss:SS");
   SerialPort.list().then((ports) => {
     ports.forEach((port) => {
       if (port.path === _port) {
@@ -36,8 +36,8 @@ ReadPort = (_port) => {
         const parser = new Readline();
         readPort.pipe(parser);
         parser.on("data", (line) => {
-          console.log(line);
-          const now = moment().format("DD-MM-YYYY HH:mm:SS");
+          const now = moment().format("DD-MM-YYYY HH:mm:ss:SS");
+          console.log(`${now}: ${line}`);
           fs.appendFileSync(filePath, `${now} :: ${line}`);
         });
       }
@@ -47,7 +47,7 @@ ReadPort = (_port) => {
 
 Start = async () => {
   let myPorts = [];
-  
+
   await SerialPort.list().then(
     (ports) => {
       console.log("\n");
@@ -62,20 +62,20 @@ Start = async () => {
   );
   rl.question("\nJaki port COM otworzyć? ", (userPort) => {
     const uPort = parseInt(userPort);
-    
-    
-    if (myPorts.length >= uPort){
+
+
+    if (myPorts.length - 1 >= uPort) {
       ReadPort(myPorts[uPort]);
     } else {
       console.log(`Wybrałeś zły numer!`);
       rl.close();
     }
-});
+  });
 };
 
-rl.on("close", function() {
-    console.log("\nBYE BYE !!!");
-    process.exit(0);
+rl.on("close", function () {
+  console.log("\nBYE BYE !!!");
+  process.exit(0);
 });
 
 Start();

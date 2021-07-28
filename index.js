@@ -10,12 +10,12 @@ if (!fs.existsSync(logsDir)) {
 }
 
 ReadPort = (_port) => {
-  // const date = new Date();
   moment.locale("pl");
   const dateNow = moment().format("DD-MM-YYYY HH:mm:SS");
   SerialPort.list().then((ports) => {
     ports.forEach((port) => {
       if (port.path === _port) {
+        console.log(`------------------------`);
         console.log(`odczytuje z ${port.path} ${port.pnpId}`);
         const deviceName = port.pnpId.split(`\\`);
         const filePath = `${logsDir}/${deviceName[2]}.txt`;
