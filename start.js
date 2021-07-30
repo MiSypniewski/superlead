@@ -19,6 +19,16 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+const fileName = (path, pnpID) => {
+  if (path.includes("COM")) {
+    const deviceName = pnpID.split(`\\`);
+    return deviceName[2];
+  } else {
+    const deviceName = pnpID.split(`_`);
+    return deviceName[2];
+  }
+}
+
 ReadPort = (_port) => {
   // const date = new Date();
   moment.locale("pl");
@@ -27,12 +37,12 @@ ReadPort = (_port) => {
     ports.forEach((port) => {
       if (port.path === _port) {
         console.log(`odczytuje z ${port.path} ${port.pnpId}`);
-        const deviceName = port.pnpId.split(`\\`);
-        const filePath = `${logsDir}/${deviceName[2]}.txt`;
+        const deviceName = fileName(port.path, port.pnpId)
+        const filePath = `${logsDir}/${deviceName}.txt`;
         if (!fs.existsSync(filePath)) {
-          fs.writeFileSync(filePath, `${dateNow}  :: Zaczynam zapis ${deviceName[2]}\n`);
+          fs.writeFileSync(filePath, `${dateNow}  :: Zaczynam zapis ${deviceName}\n`);
         } else {
-          fs.appendFileSync(filePath, `${dateNow} :: Zaczynam zapis ${deviceName[2]}\n`);
+          fs.appendFileSync(filePath, `${dateNow} :: Zaczynam zapis ${deviceName}\n`);
         }
 
         const readPort = new SerialPort(`${_port}`, { baudRate: speed });
