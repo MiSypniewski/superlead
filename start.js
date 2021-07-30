@@ -6,6 +6,9 @@ const moment = require("moment");
 
 const logsDir = "./logs";
 
+//baudRate: [ 9600, 115200 ]
+const speed = 115200;
+
 if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir);
 }
@@ -32,7 +35,7 @@ ReadPort = (_port) => {
           fs.appendFileSync(filePath, `${dateNow} :: Zaczynam zapis ${deviceName[2]}\n`);
         }
 
-        const readPort = new SerialPort(`${_port}`, { baudRate: 9600 });
+        const readPort = new SerialPort(`${_port}`, { baudRate: speed });
         const parser = new Readline();
         readPort.pipe(parser);
         parser.on("data", (line) => {
