@@ -1,6 +1,7 @@
 ## `NODE JS`
 
 Install Node.js
+npm install
 
 ### `node start.js`
 
