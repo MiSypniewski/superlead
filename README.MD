@@ -15,6 +15,6 @@ Select 0, 1, or other port to start read!
 
 Display all COM ports
 
-### `node instex.js COM3`
+### `node index.js COM3`
 
 Start read from PORT 3
